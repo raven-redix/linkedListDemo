@@ -4,6 +4,7 @@ class Node {
     constructor(data, next = null) {
         this.data = data
         this.next = next
+        this.tail
     }
 }
 
@@ -72,43 +73,86 @@ class SinglyLinkedList {
         
     }
 
-//////////// Singly LL challenges /////////////
+    //////////// Singly LL challenges /////////////
 
     //create a function that sets the tail(last node)
     setTail(data) {
-        // check if there is an existing head
+        // check that there is a head 
         if(!this.head) {
             this.head = new Node(data)
-            return this.head
+            this.tail = this.head
         } else {
-            // redefine the head and references if there is already a head
-            let tempHead = this.head
-            // set the new head
-            this.head = new Node(data)
-            // define the new heads next reference to the old head
-            this.head.next = tempHead
-            return this.head
+            // we must traverse until we reach the last node [data: | next: null]
+            let currentNode = this.head
+            while(currentNode.next !== null) {
+                currentNode = currentNode.next
+            }
+            // create a tail variable to host the old tail
+            let oldTail = currentNode // [data: | next: null]
+            // redefine the old tail's next pointer to the new tail
+            oldTail.next = new Node(data)
+            this.tail = oldTail.next
+            return
         }
     }
 
 
     //find node
-    // findNode(data) {
+    findNode(data) {
+        // check for an edge case if there is an existing head
+        if(!this.head) {
+            console.log('No nodes in our linked list')
+            return false
+        } else {
+            // traverse through our linked list
+            let currentNode = this.head
+            // check to see if we are not at the end
+            while(currentNode !== null) {
+            // check to see if the currentNode data is equal to the data // return true
+                if(currentNode.data === data) {
+                    console.log('Node has been found', currentNode)
+                    return true // or you could return the node
+                }
+                currentNode = currentNode.next
+            }
+            console.log('No node with that data in linked list')
+            return false
+        }
+    }
 
-    // }
+    // insertNodeAtIndx
+    insertNodeAtIdx(indx, data) {
+        // create a counter, as we traverse the list, the counter will increment
+        // return the node that matches counter === indx
+        // check for the head
+        if(!this.head) {
+            return false
+        } else {
+            let counter = 0 // 1 or 0? get clarification from the interviewer on where the index should start
+            // starting point
+            let currentNode = this.head
+            while(counter !== indx) {
+                // traverse and increment counter
+                currentNode = currentNode.next
+                counter++
+            }
+            // preserve the currentNode.next node
+            let tempCurrNext = currentNode.next
+            // redefine next pointer of currentNode to the newNode
+            currentNode.next = new Node(data)
+            // redefine the newNode's next to the preserved node
+            let newNode = currentNode.next
+            newNode.next = tempCurrNext
+        }
+    }
 
-    //insertNodeAtIdx
-    // insertNodeAtIdx(idx, node) {
+    //deleteNodeAtIndx
+    deleteNodeAtIdx(indx){
 
-    // }
+    }
 
-    //deleteNodeAtIdx
-    // deleteNodeAtIdx(idx){
-
-    // }
-
-//////////// CHALLENGE /////////////    
-//Prompt: Write a method that determines if the SSl is circular (hint: think of what happens when you draw a circle)
+    //////////// CHALLENGE /////////////    
+    //Prompt: Write a method that determines if the SSl is circular (hint: think of what happens when you draw a circle)
 
 }
 
@@ -137,4 +181,17 @@ sLL.logList();
 // } else {
 //     // move our currentNode to the next node in our list
 //     currentNode = currentNode.next
+// }
+
+
+
+// Preeti and Munner and Yacob
+// setTail(data) {
+//     let currentNode = this.head
+//     // create a condition to check if we are at the end
+//     while(currentNode.next !== null) {
+//         currentNode = currentNode.next
+//     }
+//     currentNode.next = new Node(data)
+//     return
 // }
